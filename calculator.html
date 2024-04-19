@@ -1,0 +1,125 @@
+<html>
+  <head>
+    <link href="main.css?v=1" />
+    <style>
+      .calculator {
+        max-width: 320px;
+        background: #eee;
+      }
+      .calculator-buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border: 0;
+      }
+      .calc-numbers {
+        background: black;
+        color: white;
+        font-size: 2em;
+        border: 0;
+        padding: 0.3em;
+        text-align: right;
+        width: 100%;
+        height: 100px;
+      }
+      .span-2 {
+        grid-column: span 2;
+      }
+      .span-3 {
+        grid-column: span 3;
+      }
+      .btn {
+        font-size: 1em;
+        height: 65px;
+        border: 1px solid black;
+      }
+      .btn:hover {
+        background: #fff;
+      }
+      .orange {
+        background-color: orange;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator">
+      <input type="text" class="calc-numbers" readonly id="screen" value="0" />
+      <div class="calculator-buttons">
+        <button
+          class="btn is-clear span-2 orange operator"
+          onclick="deleteValue()"
+        >
+          C
+        </button>
+        <button class="btn orange operator" onclick="backspace()">
+          &larr;
+        </button>
+        <button class="btn orange operator" onclick="getValue('/')">
+          &divide;
+        </button>
+        <button class="btn" onclick="getValue('7')">7</button>
+        <button class="btn" onclick="getValue('8')">8</button>
+        <button class="btn" onclick="getValue('9')">9</button>
+        <button class="btn orange operator" onclick="getValue('*')">x</button>
+        <button class="btn" onclick="getValue('4')">4</button>
+        <button class="btn" onclick="getValue('5')">5</button>
+        <button class="btn" onclick="getValue('6')">6</button>
+        <button class="btn orange" onclick="getValue('-')">-</button>
+        <button class="btn" onclick="getValue('1')">1</button>
+        <button class="btn" onclick="getValue('2')">2</button>
+        <button class="btn" onclick="getValue('3')">3</button>
+        <button class="btn orange operator" onclick="getValue('+')">+</button>
+        <button class="btn span-3" onclick="getValue('0')">0</button>
+        <button class="btn orange operator" onclick="calculateAnswer()">
+          =
+        </button>
+      </div>
+    </div>
+    <h2 id="demo"></h2>
+    <script>
+      const screen = document.getElementById("screen");
+      const paragh = document.getElementById("demo");
+      function getValue(value) {
+        let currentEquation = screen.value;
+        if (currentEquation === "0" && !isOpperator(value)) {
+          currentEquation = "";
+        }
+        if (
+          isOpperator(value) &&
+          isOpperator(currentEquation[currentEquation.length - 1])
+        ) {
+          return;
+        } else {
+          screen.value = currentEquation + value;
+        }
+      }
+
+      function deleteValue() {
+        screen.value = "0";
+      }
+      function backspace() {
+        screen.value = screen.value.slice(0, -1);
+      }
+      function calculateAnswer() {
+        let currentEquation = screen.value;
+        if (isOpperator(currentEquation[currentEquation.length - 1])) {
+          alert("Can't Press Equal on an opperator");
+          paragh.textContent =
+            "Please use the backspace(left arrow) and try again";
+          return;
+        }
+        try {
+          let result = eval(screen.value);
+          screen.value = result;
+        } catch (event) {
+          alert("Careful Now! You Entered an opperator at the end");
+
+          deleteValue();
+        }
+      }
+      function isOpperator(operator) {
+        let opperators = ["/", "*", "+", "-"];
+        return opperators.includes(operator);
+      }
+    </script>
+  </body>
+</html>
